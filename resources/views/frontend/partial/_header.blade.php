@@ -3,8 +3,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
-                    <h4 class="text-white">About</h4>
-                    <p class="text-muted"> Ecommerce Website Development</p>
+                    <h4 class="text-white">Contact</h4>
+                    <ul class="list-unstyled">
+                        @foreach($categories as $category)
+                        <li>
+                            <a href="{{ $category->slug }}">
+                                {{ $category->name }}
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Contact</h4>
