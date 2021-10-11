@@ -11,7 +11,30 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.sass('resources/sass/app.scss', 'public/css');
+
+mix.styles([
+    'public/template/css/custom.css',
+], 'public/css/all.css');
+
+mix.js([
+    'resources/js/app.js',
+    'public/template/js/app.js',
+], 'public/js/all.js');
+
+mix.version();
+
+
+// "public/template/js/jquery-3.3.1.min.js",
+//     "public/template/js/popper.min.js",
+//     "public/template/js/bootstrap.min.js",
+//     "public/template/js/main.js",
+//     "public/template/js/plugins/pace.min.js",
+//     "public/template/js/plugins/select2.min.js",
+//     "public/template/js/plugins/chart.js",
+//     "public/template/js/all.min.js",
+//     "public/template/js/plugins/jquery.dataTables.min.js",
+//     "public/template/js/plugins/dataTables.bootstrap.min.js",
+//     "public/template/js/toastr.min.js",
+//     "public/template/js/sweetalert2.min.js",
+//     "public/template/js/plugins/bootstrap-datepicker.min.js"
