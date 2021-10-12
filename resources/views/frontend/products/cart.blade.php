@@ -1,8 +1,13 @@
 @extends('frontend.layout.master')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-5">
 
+        @if(session()->has('message'))
+            <div class="alert alert-success">
+                {{ session()->get('message') }}
+            </div>
+        @endif
         <table id="cart" class="table table-hover table-condensed table-responsive">
             <thead>
             <tr>
@@ -14,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($cart as $product)
+            @foreach($cart as $key=>$product)
                 <tr>
                     <td data-th="Product">
                         <div class="row">
@@ -24,13 +29,20 @@
                             </div>
                         </div>
                     </td>
-                    <td data-th="Price">${{ $product['price'] }}</td>
+                    <td data-th="Price">${{  number_format($product['price']) }}</td>
                     <td data-th="Quantity">
                         <input type="number" value="{{ $product['quantity'] }}" class="form-control quantity" />
                     </td>
-                    <td data-th="Subtotal" class="text-center">${{ $product['sub_total'] }}</td>
+                    <td data-th="Subtotal" class="text-center">${{  number_format($product['sub_total']) }}</td>
                     <td class="actions" data-th="">
-                        <button class="btn btn-danger btn-sm remove-from-cart" data-id=""><i class="fa fa-trash-o"></i>Remove</button>
+                        <form action="{{ route('frontend.cart.remove') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $key}}">
+                            <button type="submit" class="btn btn-danger btn-sm remove-from-cart" >
+                                <i class="fa fa-trash-o"></i>Remove
+                            </button>
+
+                        </form>
                     </td>
                 </tr>
             @endforeach
@@ -40,8 +52,8 @@
 
             <tr>
                 <td><a href="{{ url('/') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-                <td colspan="2" class="hidden-xs"></td>
-                <td class="hidden-xs text-center"><strong>Total ${{ $total }}</strong></td>
+                <td colspan="2"><a href="{{ route('frontend.cart.clear')}}" class="btn btn-info"><i class="fa fa-angle-left"></i> Clear Cart</a></td>
+                <td class="text-center"><strong>Total ${{ number_format($total,2)  }}</strong></td>
             </tr>
             </tfoot>
         </table>

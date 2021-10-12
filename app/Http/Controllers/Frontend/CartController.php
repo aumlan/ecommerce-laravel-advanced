@@ -47,8 +47,36 @@ class CartController extends Controller
 
         session(['cart'=> $cart]);
 //        session()->remove('cart');
-        session()->flash('message', $product->title.'Added To Cart');
+        session()->flash('message', $product->title.' Added To Cart');
 
         return redirect()->route('frontend.cart.show');
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        try {
+            $this->validate($request,[
+                'product_id' => 'required'
+            ]);
+        }catch (ValidationException $e){
+            return redirect()->back();
+
+        }
+
+        $cart = session()->has('cart') ? session()->get('cart') : [];
+        unset($cart[$request->input('product_id')]);
+        session(['cart'=> $cart]);
+        session()->flash('message','Product Removed From Cart');
+
+        return redirect()->back();
+
+    }
+
+    public function clearCart()
+    {
+        session()->remove('cart');
+        session()->flash('message','Cart Has been Cleared');
+
+        return redirect()->back();
     }
 }

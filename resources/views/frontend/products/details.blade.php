@@ -24,9 +24,15 @@
                 {{ $product->description }}
             </p>
             <br>
-            <button type="button" class="btn btn-success">
-                Add To Cart
-            </button>
+
+            <form action="{{ route('frontend.cart.add') }}" method="post">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <button type="submit" class="btn btn-success">
+                    Add To Cart
+                </button>
+
+            </form>
         </div>
     </div>
 </div>
