@@ -6,6 +6,12 @@
     <div class="album py-5 bg-light">
         <div class="container">
 
+            @if(session()->has('message'))
+                <div class="alert alert-{{ session()->get('type')  }}">
+                    {{ session()->get('message') }}
+                </div>
+            @endif
+
             <div class="row">
                 @foreach($products as $product)
                 <div class="col-md-4">

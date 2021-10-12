@@ -18,8 +18,8 @@
                     <h4 class="text-white">Contact</h4>
                     <ul class="list-unstyled">
                         @guest()
-                            <li><a href="#" class="text-white">Create an Account</a></li>
-                            <li><a href="#" class="text-white">Login</a></li>
+                            <li><a href="{{ route('frontend.user.register') }}" class="text-white">Create an Account</a></li>
+                            <li><a href="{{ route('frontend.user.login') }}" class="text-white">Login</a></li>
                         @endguest
                         @auth()
                             <li><a href="#" class="text-white">My Profile</a></li>

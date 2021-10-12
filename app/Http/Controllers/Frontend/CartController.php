@@ -47,7 +47,7 @@ class CartController extends Controller
 
         session(['cart'=> $cart]);
 //        session()->remove('cart');
-        session()->flash('message', $product->title.' Added To Cart');
+        setSuccess($product->title.' Added To Cart');
 
         return redirect()->route('frontend.cart.show');
     }
@@ -66,7 +66,7 @@ class CartController extends Controller
         $cart = session()->has('cart') ? session()->get('cart') : [];
         unset($cart[$request->input('product_id')]);
         session(['cart'=> $cart]);
-        session()->flash('message','Product Removed From Cart');
+        setSuccess('Product Removed From Cart');
 
         return redirect()->back();
 
@@ -75,8 +75,13 @@ class CartController extends Controller
     public function clearCart()
     {
         session()->remove('cart');
-        session()->flash('message','Cart Has been Cleared');
+        setSuccess('Cart Has been Cleared');
 
         return redirect()->back();
+    }
+
+    public function checkoutCart()
+    {
+        return view('frontend.products.checkout');
     }
 }

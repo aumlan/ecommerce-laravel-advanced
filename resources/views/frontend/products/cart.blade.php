@@ -12,7 +12,7 @@
             <thead>
             <tr>
                 <th style="width:50%">Product</th>
-                <th style="width:10%">Price</th>
+                <th style="width:20%">Price</th>
                 <th style="width:8%">Quantity</th>
                 <th style="width:22%" class="text-center">Subtotal</th>
                 <th style="width:10%"></th>
@@ -52,7 +52,9 @@
 
             <tr>
                 <td><a href="{{ url('/') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-                <td colspan="2"><a href="{{ route('frontend.cart.clear')}}" class="btn btn-info"><i class="fa fa-angle-left"></i> Clear Cart</a></td>
+                <td ><a href="{{ route('frontend.cart.clear')}}" class="btn btn-info"><i class="fa fa-angle-left"></i> Clear Cart</a></td>
+                <td ><a href="{{ route('frontend.cart.checkout')}}" class="btn btn-success"><i class="fa fa-angle-left"></i>  Checkout</a></td>
+
                 <td class="text-center"><strong>Total ${{ number_format($total,2)  }}</strong></td>
             </tr>
             </tfoot>

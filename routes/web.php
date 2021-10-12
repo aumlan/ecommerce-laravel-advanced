@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\AuthController;
 use App\Http\Controllers\Frontend\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +28,11 @@ Route::group(['namespace' => 'Frontend'],function (){
     Route::post('/cart', [CartController::class, 'addToCart'])->name('frontend.cart.add');
     Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('frontend.cart.remove');
     Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('frontend.cart.clear');
+    Route::get('/checkout', [CartController::class, 'checkoutCart'])->name('frontend.cart.checkout');
+
+    Route::get('/login', [AuthController::class, 'login'])->name('frontend.user.login');
+    Route::get('/register', [AuthController::class, 'register'])->name('frontend.user.register');
+
+    Route::get('/activate/{token}', [AuthController::class, 'activate'])->name('frontend.user.activate');
 
 });
