@@ -38,12 +38,29 @@ class AuthController extends Controller
 
     public function login()
     {
+        $credintials = [
+            'email' => 'aumlan.springsoftit@gmail.com',
+            'password' => '12345678'
+        ];
 
+        if (auth()->attempt($credintials)){
+            $user = auth()->user();
+            if ($user->email_verified_at === null){
+                setError("Verify Your Account");
+                return redirect()->route('frontend.home');
+            }
+            setSuccess("Login Successfull");
+            return redirect()->route('frontend.home');
+        }
+
+        setError('Invalid Credintials');
+        return redirect()->back();
     }
 
     public function activate($token = null)
     {
         if ($token===null){
+            setError('No Token Found');
             return redirect()->route('frontend.home');
         }
 
