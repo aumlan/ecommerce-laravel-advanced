@@ -12,7 +12,11 @@
                 {{ $product->title }}
             </h3>
             <h5>
-                $ {{ $product->price }}
+                @if ($product->sale_price !== null )
+                    $<strike> {{ $product->price }}</strike> ${{ $product->sale_price }}
+                @else
+                    ${{ $product->price }}
+                @endif
             </h5>
             <br>
 

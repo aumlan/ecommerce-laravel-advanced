@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -19,5 +20,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Frontend'],function (){
     Route::get('/', [HomeController::class, 'showHomePage'])->name('frontend.home');
+
     Route::get('/product/{slug}', [ProductController::class, 'showDetails'])->name('frontend.product.details');
+
+    Route::get('/cart', [CartController::class, 'showCart'])->name('frontend.cart.show');
+    Route::post('/cart', [CartController::class, 'addToCart'])->name('frontend.cart.add');
+
 });
