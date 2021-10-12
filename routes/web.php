@@ -32,7 +32,12 @@ Route::group(['namespace' => 'Frontend'],function (){
 
     Route::get('/login', [AuthController::class, 'login'])->name('frontend.user.login');
     Route::get('/register', [AuthController::class, 'register'])->name('frontend.user.register');
-
     Route::get('/activate/{token}', [AuthController::class, 'activate'])->name('frontend.user.activate');
+
+    Route::group(['middleware' => 'auth'],function (){
+        Route::get('/profile', [AuthController::class, 'profile'])->name('frontend.user.profile');
+        Route::get('/logout', [AuthController::class, 'logout'])->name('frontend.user.logout');
+        Route::post('/order', [CartController::class, 'processOrder'])->name('frontend.user.order');
+    });
 
 });

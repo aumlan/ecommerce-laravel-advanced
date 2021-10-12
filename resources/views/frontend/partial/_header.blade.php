@@ -23,7 +23,7 @@
                         @endguest
                         @auth()
                             <li><a href="#" class="text-white">My Profile</a></li>
-                            <li><a href="#" class="text-white">Logout</a></li>
+                            <li><a href="{{ route('frontend.user.logout') }}" class="text-white">Logout</a></li>
                         @endauth
 
                         <li><a href="{{ route('frontend.cart.show') }}" class="text-white">Cart</a></li>

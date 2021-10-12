@@ -1,98 +1,142 @@
 @extends('frontend.layout.master')
 
 @section('content')
-    <section class="section-pagetop bg-dark">
-        <div class="container clearfix">
-            <h2 class="title-page">Checkout</h2>
-        </div>
-    </section>
-    <section class="section-content bg padding-y">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    @if (Session::has('error'))
-                        <p class="alert alert-danger">{{ Session::get('error') }}</p>
-                    @endif
-                </div>
+    <div class="container mt-5">
+        <section class="section-pagetop">
+            <div class="container ">
+                <h2 class="title-page">Checkout</h2>
             </div>
-            <form action="#" method="POST" role="form">
-                @csrf
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <header class="card-header">
-                                <h4 class="card-title mt-2">Billing Details</h4>
-                            </header>
-                            <article class="card-body">
-                                <div class="form-row">
-                                    <div class="col form-group">
-                                        <label>First name</label>
-                                        <input type="text" class="form-control" name="first_name">
-                                    </div>
-                                    <div class="col form-group">
-                                        <label>Last name</label>
-                                        <input type="text" class="form-control" name="last_name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" name="address">
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>City</label>
-                                        <input type="text" class="form-control" name="city">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Country</label>
-                                        <input type="text" class="form-control" name="country">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group  col-md-6">
-                                        <label>Post Code</label>
-                                        <input type="text" class="form-control" name="post_code">
-                                    </div>
-                                    <div class="form-group  col-md-6">
-                                        <label>Phone Number</label>
-                                        <input type="text" class="form-control" name="phone_number">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email Address</label>
-{{--                                    <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}" disabled>--}}
-                                    <small class="form-text text-muted">We'll never share your email with anyone else.</small>
-                                </div>
-                                <div class="form-group">
-                                    <label>Order Notes</label>
-                                    <textarea class="form-control" name="notes" rows="6"></textarea>
-                                </div>
-                            </article>
+        </section>
+        @guest()
+            <div class="alert alert-warning">
+                You need to <a href="{{ route('frontend.user.login') }}"> Login </a> to checkout.
+            </div>
+        @else
+            <div class="alert alert-info">
+                Ordering as {{ auth()->user()->name }}
+            </div>
+
+
+
+        <div class="row">
+            <div class="col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill">{{ count($cart) }}</span>
+                </h4>
+                <ul class="list-group mb-3">
+
+                    @foreach($cart as $key=>$product)
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">{{ $product['title'] }}</h6>
+                            <small class="text-muted">Quantity: <strong>{{ $product['quantity'] }}</strong> </small>
+                        </div>
+                        <span class="text-muted"><strong>${{ $product['price'] }} </strong></span>
+                    </li>
+                    @endforeach
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (USD)</span>
+                        <strong>${{ number_format($total,2)  }}</strong>
+                    </li>
+                </ul>
+
+                <form action=" " class="card p-2">
+                    @csrf
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Promo code">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-secondary">Redeem</button>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <header class="card-header">
-                                        <h4 class="card-title mt-2">Your Order</h4>
-                                    </header>
-                                    <article class="card-body">
-                                        <dl class="dlist-align">
-                                            <dt>Total cost: </dt>
-{{--                                            <dd class="text-right h5 b"> {{ config('settings.currency_symbol') }}{{ \Cart::getSubTotal() }} </dd>--}}
-                                        </dl>
-                                    </article>
-                                </div>
+                </form>
+            </div>
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Billing address</h4>
+                <form action="{{ route('frontend.user.order') }}" class="needs-validation" novalidate method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">First name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                Valid first name is required.
                             </div>
-                            <div class="col-md-12 mt-4">
-                                <button type="submit" class="subscribe btn btn-success btn-lg btn-block">Place Order</button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Last name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                Valid last name is required.
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+
+                    <div class="mb-3">
+                        <label for="username">Name</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@</span>
+                            </div>
+                            <input type="text" class="form-control" name="customer_name" value="{{ auth()->user()->name }}" required>
+                            <div class="invalid-feedback" style="width: 100%;">
+                                Your username is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                        <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}">
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+                        <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="country">Country</label>
+                            <select class="custom-select d-block w-100" id="country" required>
+                                <option value="">Choose...</option>
+                                <option>United States</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid country.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="state">State</label>
+                            <select class="custom-select d-block w-100" id="state" required>
+                                <option value="">Choose...</option>
+                                <option>California</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="zip">Zip</label>
+                            <input type="text" class="form-control" id="zip" placeholder="" required>
+                            <div class="invalid-feedback">
+                                Zip code required.
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                </form>
+            </div>
         </div>
-    </section>
+        @endguest
+    </div>
 
 @endsection

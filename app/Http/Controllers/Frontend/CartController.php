@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
@@ -82,6 +84,48 @@ class CartController extends Controller
 
     public function checkoutCart()
     {
-        return view('frontend.products.checkout');
+        $data=[];
+        $data['cart'] = session()->has('cart') ? session()->get('cart') : [];
+        $data['total'] = array_sum(array_column($data['cart'],'sub_total'));
+        return view('frontend.products.checkout',$data);
     }
+
+    public function processOrder()
+    {
+        $data=[];
+        $data['cart'] = session()->has('cart') ? session()->get('cart') : [];
+        $data['total'] = array_sum(array_column($data['cart'],'sub_total'));
+
+        $order = Order::create([
+            'user_id' => auth()->user()->id,
+            'customer_name' => 'aumlan',
+            'customer_phone_number' => '01767125279',
+            'address' => 'bashundhara',
+            'city' => 'dhaka',
+            'postal_code' => '1229',
+            'total_amount' =>$data['total'],
+            'paid_amount' => $data['total'],
+            'payment_details' => 'COD',
+            'processed_by' => auth()->user()->id
+        ]);
+
+        foreach ($data['cart'] as $product_id=>$product){
+            $order->products()->create([
+                'product_id' => $product_id,
+                'quantity' => $product['quantity'],
+                'price' => $product['sub_total']
+            ]);
+        }
+
+        session()->forget('cart','total');
+        setSuccess('order created');
+        return redirect()->route('frontend.home');
+
+    }
+
+
+
+
+
+
 }
