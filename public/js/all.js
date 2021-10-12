@@ -2060,9 +2060,7 @@ module.exports = {
   \***********************************/
 /***/ (() => {
 
-$(document).ready(function () {
-  alert("ready!");
-});
+
 
 /***/ }),
 
